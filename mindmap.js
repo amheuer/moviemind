@@ -4,8 +4,8 @@ import { client, addReviewToDB, generateEmbedding, compareReviews, queryDB } fro
 export async function main() {
     await client.connect();
     try {
-        const text = 'I really like the martian because it a very funny movie that also has good dramatic elements. I like that it is set in space and that it is about humanity overcoming challenges from space travel. I also like the book it was based on. ';
-        const title = 'The Martian'
+        const text = 'FLINT AND STEEL CHICKEN JOCKEY THE NETHER AN ENDER PEARL I AM STEVE.';
+        const title = 'A Minecraft Movie'
         const author = 'user'
         const stars = 5
         const embed = await generateEmbedding(text);
