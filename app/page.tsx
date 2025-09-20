@@ -6,7 +6,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Star, Terminal, Brain, ChevronRight, Code, Cpu, Activity, Zap, Database } from "lucide-react"
+import { Star, Terminal, Brain, ChevronRight, Code, Cpu, Activity, Zap, Database } from "@/components/icons"
 
 export default function MovieMind() {
   const [movie, setMovie] = useState("")
@@ -328,11 +328,10 @@ export default function MovieMind() {
                         className="transition-all hover:scale-110 focus:scale-110 touch-manipulation p-1"
                       >
                         <Star
-                          className={`w-8 h-8 sm:w-10 sm:h-10 ${
-                            star <= rating
+                          className={`w-8 h-8 sm:w-10 sm:h-10 ${star <= rating
                               ? "fill-primary text-primary terminal-glow"
                               : "text-muted-foreground hover:text-primary/50"
-                          }`}
+                            }`}
                         />
                       </button>
                     ))}

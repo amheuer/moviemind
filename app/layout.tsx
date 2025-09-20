@@ -1,7 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+// Local fallback for geist fonts to avoid requiring an external package during dev
+const GeistSans = { variable: "font-sans" }
+const GeistMono = { variable: "font-mono" }
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
