@@ -1,16 +1,44 @@
 import 'dotenv/config';
 import axios from 'axios';
-import { addReviewToDB, generateEmbedding, client } from './mindUtils.js';
+import { addReviewToDB, generateEmbedding, client, MovieReview } from './MindUtils';
 
 const API_KEY = process.env.TMDB_API_KEY; 
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-async function fetchTopMovies(limit = 400) {
-  let movies = [];
+interface TMDBMovie {
+    id: number;
+    title: string;
+}
+
+interface TMDBReview {
+    author: string;
+    content: string;
+    author_details: {
+        rating: number | null;
+    };
+}
+
+interface TMDBReviewsResponse {
+    results: TMDBReview[];
+}
+
+interface TMDBMoviesResponse {
+    results: TMDBMovie[];
+    total_pages: number;
+}
+
+interface ProcessedReview {
+    author: string;
+    stars: number;
+    review: string;
+}
+
+async function fetchTopMovies(limit: number = 400): Promise<TMDBMovie[]> {
+  let movies: TMDBMovie[] = [];
   let page = 1;
 
   while (movies.length < limit) {
-    const res = await axios.get(`${BASE_URL}/movie/top_rated`, {
+    const res = await axios.get<TMDBMoviesResponse>(`${BASE_URL}/movie/top_rated`, {
       params: { api_key: API_KEY, page }
     });
 
@@ -23,23 +51,23 @@ async function fetchTopMovies(limit = 400) {
   return movies.slice(0, limit);
 }
 
-async function fetchReviews(movieId) {
-  const res = await axios.get(`${BASE_URL}/movie/${movieId}/reviews`, {
+async function fetchReviews(movieId: number): Promise<ProcessedReview[]> {
+  const res = await axios.get<TMDBReviewsResponse>(`${BASE_URL}/movie/${movieId}/reviews`, {
     params: { api_key: API_KEY }
   });
 
   return res.data.results
     .filter(r => r.author_details.rating !== null)
-    .sort((a, b) => b.author_details.rating - a.author_details.rating)
+    .sort((a, b) => (b.author_details.rating || 0) - (a.author_details.rating || 0))
     .slice(0, 4)
     .map(r => ({
       author: r.author,
-      stars: r.author_details.rating / 2, 
+      stars: (r.author_details.rating || 0) / 2, 
       review: r.content
     }));
 }
 
-async function run() {
+async function run(): Promise<void> {
   await client.connect();
 
   try {
@@ -50,7 +78,7 @@ async function run() {
 
       for (let r of reviews) {
         const embed = await generateEmbedding(r.review);
-        const item = {
+        const item: MovieReview = {
           title: movie.title,
           author: r.author,
           stars: r.stars,

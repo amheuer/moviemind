@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import * as dotenv from 'dotenv';
+import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import { GoogleGenAI } from '@google/genai';
 import Cerebras from '@cerebras/cerebras_cloud_sdk';
 
@@ -19,26 +19,37 @@ const cerebrasClient = new Cerebras({
     apiKey: process.env['CEREBRAS_API_KEY'],
 });
 
-export async function addReviewToDB(item) {
+export interface MovieReview {
+    title: string;
+    author: string;
+    stars: number;
+    review: string;
+    embedding: number[];
+}
+
+export interface ReviewWithScore extends MovieReview {
+    score: number;
+}
+
+export async function addReviewToDB(item: MovieReview): Promise<ObjectId> {
     const db = client.db('mindmap');
     const collection = db.collection('movie_reviews');
     const result = await collection.insertOne(item);
     return result.insertedId;
 }
 
-export async function generateEmbedding(text) {
+export async function generateEmbedding(text: string): Promise<number[]> {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMMA_API_KEY });
     const response = await ai.models.embedContent({
         model: 'gemini-embedding-001',
-        contents: text,
-        taskType: 'SEMANTIC_SIMILARITY'
+        contents: text
     });
     const embDoc = response.embeddings?.[0];
-    if (!embDoc) throw new Error('No embedding returned from model');
+    if (!embDoc || !embDoc.values) throw new Error('No embedding returned from model');
     return Array.isArray(embDoc.values) ? embDoc.values : Array.from(embDoc.values);
 }
 
-export async function queryDB(embedding, title, author) {
+export async function queryDB(embedding: number[], title: string, author: string): Promise<ReviewWithScore[]> {
     const database = client.db("mindmap");
     const coll = database.collection("movie_reviews");
     const agg = [
@@ -81,12 +92,12 @@ export async function queryDB(embedding, title, author) {
     ];
     const docs = await coll.aggregate(agg).toArray();
     docs.forEach((doc) => console.dir(JSON.stringify(doc)));
-    return docs;
+    return docs as ReviewWithScore[];
 }
 
-export async function compareReviews(userInput, similarReview) {
+export async function compareReviews(userInput: MovieReview, similarReview: ReviewWithScore): Promise<string | undefined> {
     const completionCreateResponse = await cerebrasClient.chat.completions.create({
-        messages: [{ role: 'user', content: `You are the charming and helpful chatbot that runs the website MovieMind. Your job is to look at a user’s review of a movie and a recommendation for another movie based on a similar user review and explain to the user why the recommendation was made. You must use 60 words or less and should always support the suggestion that was made and never provide alternative suggestions. Use the term “we” and take responsibility for the website’s suggestions. The user\'s review for the movie ${userInput.title} was ${userInput.review} and they gave it ${userInput.stars} stars. The recommended movie was ${similarReview.title}, the review for it was ${similarReview.review} and it was reviewed as ${similarReview.stars} stars.` }],
+        messages: [{ role: 'user', content: `You are the charming and helpful chatbot that runs the website MovieMind. Your job is to look at a user's review of a movie and a recommendation for another movie based on a similar user review and explain to the user why the recommendation was made. You must use 60 words or less and should always support the suggestion that was made and never provide alternative suggestions. Use the term "we" and take responsibility for the website's suggestions. The user\'s review for the movie ${userInput.title} was ${userInput.review} and they gave it ${userInput.stars} stars. The recommended movie was ${similarReview.title}, the review for it was ${similarReview.review} and it was reviewed as ${similarReview.stars} stars.` }],
         model: 'llama-4-scout-17b-16e-instruct',
         max_tokens: 200
     });
