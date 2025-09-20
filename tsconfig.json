@@ -1,41 +1,41 @@
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
-    "incremental": true,
-    "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
-  },
-  "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx"
+mongo dbext","skipLibCheck": true,
+/* Bundler mode */
+"moduleResolution": "bundler",
+"allowImportingTsExtensions": true,
+"isolatedModules": true,
+"moduleDetection": "force",
+"noEmit": true,
+"jsx": "react-jsx",
+"esModuleInterop": true,
+"allowSyntheticDefaultImports": true,
+"forceConsistentCasingInFileNames": true,
+/* Linting */
+"strict": false,
+"noUnusedLocals": false,
+"noUnusedParameters": false,
+"noImplicitAny": false,
+"noFallthroughCasesInSwitch": false,
+"strictNullChecks": false,
+/* Path mapping */
+"baseUrl": ".",
+"paths": {
+  "@/*": [
+    "./client/*"
   ],
-  "exclude": [
-    "node_modules"
+  "@shared/*": [
+    "./shared/*"
   ]
+}
+},
+"include": [
+"client/**/*",
+"server/**/*",
+"shared/**/*",
+"vite.config.ts",
+"vite.config.server.ts"
+],
+"exclude": [
+"node_modules",
+"dist"
+]
 }
