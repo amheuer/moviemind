@@ -33,7 +33,7 @@ export interface ReviewWithScore extends MovieReview {
 
 export async function addReviewToDB(item: MovieReview): Promise<ObjectId> {
     const db = client.db('mindmap');
-    const collection = db.collection('movie_reviews');
+    const collection = db.collection('batch_reviews');
     const result = await collection.insertOne(item);
     return result.insertedId;
 }
@@ -57,7 +57,9 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
 export async function queryDB(embedding: number[], title: string, author: string): Promise<ReviewWithScore[]> {
     const database = client.db("mindmap");
-    const coll = database.collection("movie_reviews");
+    const coll = database.collection("batch_reviews");
+    const normalizedTitle = title.replace(/\s+/g, '').toLowerCase();
+    const normalizedAuthor = author.replace(/\s+/g, '').toLowerCase();
     const agg = [
         {
             $vectorSearch: {
@@ -68,10 +70,33 @@ export async function queryDB(embedding: number[], title: string, author: string
                 limit: 20
             }
         },
+        // Normalize title and author from the DB
+        {
+            $addFields: {
+                normalizedDbTitle: {
+                    $toLower: {
+                        $replaceAll: {
+                            input: "$title",
+                            find: " ",
+                            replacement: ""
+                        }
+                    }
+                },
+                normalizedDbAuthor: {
+                    $toLower: {
+                        $replaceAll: {
+                            input: "$author",
+                            find: " ",
+                            replacement: ""
+                        }
+                    }
+                }
+            }
+        },
         {
             $match: {
-                title: { $not: new RegExp(`^${title}$`, 'i') },
-                author: { $not: new RegExp(`^${author}$`, 'i') }
+                normalizedDbTitle: { $ne: normalizedTitle },
+                normalizedDbAuthor: { $ne: normalizedAuthor }
             }
         },
         {
@@ -96,6 +121,7 @@ export async function queryDB(embedding: number[], title: string, author: string
             }
         }
     ];
+
     const docs = await coll.aggregate(agg).toArray();
     docs.forEach((doc) => console.dir(JSON.stringify(doc)));
     return docs as ReviewWithScore[];

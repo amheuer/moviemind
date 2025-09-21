@@ -161,7 +161,7 @@ export default function MovieMind() {
                   </div>
                   <div className="border-t  mt-6 border-primary/20 pt-6">
                     <div className="font-mono text-sm terminal-prompt mb-4">
-                      # USER REVIEW DATA - SENTIMENT ANALYSIS READY
+                      # USER REVIEW DATA - SIMILARITY ANALYSIS READY
                     </div>
                     <blockquote className="text-foreground font-mono leading-relaxed text-base border-l-4 border-primary pl-4">
                       "{recommendation?.review}"
