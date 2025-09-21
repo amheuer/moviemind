@@ -48,7 +48,7 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.708 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.396 0.141 25.723);
@@ -114,6 +114,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     background: var(--background);
     @apply text-foreground font-mono;
@@ -129,6 +130,13 @@
   text-shadow: 0 0 10px var(--neural-glow), 0 0 20px var(--neural-glow), 0 0 30px var(--neural-glow);
   animation: pulse-glow 4s ease-in-out infinite alternate;
 }
+
+.terminal-glow-filter {
+  filter:
+    drop-shadow(0 0 10px var(--neural-glow)) drop-shadow(0 0 20px var(--neural-glow)) drop-shadow(0 0 30px var(--neural-glow));
+  animation: pulse-glow 4s ease-in-out infinite alternate;
+}
+
 
 .neural-grid {
   background-image: linear-gradient(rgba(157, 78, 221, 0.1) 1px, transparent 1px),
@@ -168,13 +176,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    transparent 48%,
-    rgba(157, 78, 221, 0.03) 49%,
-    rgba(157, 78, 221, 0.06) 50%,
-    rgba(157, 78, 221, 0.03) 51%,
-    transparent 52%
-  );
+  background: linear-gradient(transparent 48%,
+      rgba(157, 78, 221, 0.03) 49%,
+      rgba(157, 78, 221, 0.06) 50%,
+      rgba(157, 78, 221, 0.03) 51%,
+      transparent 52%);
   background-size: 100% 4px;
   pointer-events: none;
   animation: scanlines 0.1s linear infinite;
@@ -216,20 +222,24 @@
   background: linear-gradient(135deg, #ff5f56 0%, #ff3b30 100%);
   box-shadow: 0 0 10px rgba(255, 95, 86, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
+
 .terminal-dot.yellow {
   background: linear-gradient(135deg, #ffbd2e 0%, #ff9500 100%);
   box-shadow: 0 0 10px rgba(255, 189, 46, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
+
 .terminal-dot.green {
   background: linear-gradient(135deg, #27ca3f 0%, #30d158 100%);
   box-shadow: 0 0 10px rgba(39, 202, 63, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 @keyframes gradient-shift {
+
   0%,
   100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -239,17 +249,19 @@
   0% {
     text-shadow: 0 0 10px var(--neural-glow), 0 0 20px var(--neural-glow), 0 0 30px var(--neural-glow);
   }
+
   100% {
-    text-shadow: 0 0 15px var(--neural-glow), 0 0 30px var(--neural-glow), 0 0 45px var(--neural-glow), 0 0 60px
-      var(--neural-glow);
+    text-shadow: 0 0 15px var(--neural-glow), 0 0 30px var(--neural-glow), 0 0 45px var(--neural-glow), 0 0 60px var(--neural-glow);
   }
 }
 
 @keyframes neural-pulse {
+
   0%,
   100% {
     opacity: 0.8;
   }
+
   50% {
     opacity: 1;
   }
@@ -259,6 +271,7 @@
   0% {
     transform: translateY(0);
   }
+
   100% {
     transform: translateY(4px);
   }

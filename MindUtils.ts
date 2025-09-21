@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
-import { GoogleGenAI } from '@google/genai';
-import Cerebras from '@cerebras/cerebras_cloud_sdk';
+import { GoogleGenerativeAI, TaskType } from '@google/generative-ai';
+import { Cerebras } from '@cerebras/cerebras_cloud_sdk';
 
 dotenv.config();
 
@@ -39,12 +39,18 @@ export async function addReviewToDB(item: MovieReview): Promise<ObjectId> {
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMMA_API_KEY });
-    const response = await ai.models.embedContent({
-        model: 'gemini-embedding-001',
-        contents: text
-    });
-    const embDoc = response.embeddings?.[0];
+    const ai = new GoogleGenerativeAI(process.env.GEMMA_API_KEY!);
+    const model = ai.getGenerativeModel({ model: 'gemini-embedding-001' });
+    const request = {
+        content: {
+            parts: [{ text }],
+            role: 'user'
+        },
+        taskType: TaskType.SEMANTIC_SIMILARITY,
+    };
+    const response = await model.embedContent(request);
+
+    const embDoc = response.embedding;
     if (!embDoc || !embDoc.values) throw new Error('No embedding returned from model');
     return Array.isArray(embDoc.values) ? embDoc.values : Array.from(embDoc.values);
 }
@@ -102,5 +108,7 @@ export async function compareReviews(userInput: MovieReview, similarReview: Revi
         max_tokens: 200
     });
 
-    return completionCreateResponse?.choices?.[0]?.message?.content;
+    const choices = (completionCreateResponse as any).choices;
+    return choices?.[0]?.message?.content;
+
 }

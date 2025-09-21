@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { client, addReviewToDB, generateEmbedding, compareReviews, queryDB, MovieReview } from './MindUtils.ts';
+import { client, addReviewToDB, generateEmbedding, compareReviews, queryDB, MovieReview } from './MindUtils.js';
 
 export async function main(): Promise<void> {
     await client.connect();
