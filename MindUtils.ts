@@ -110,5 +110,7 @@ export async function compareReviews(userInput: MovieReview, similarReview: Revi
 
     const choices = (completionCreateResponse as any).choices;
     return choices?.[0]?.message?.content;
-
 }
+
+
+

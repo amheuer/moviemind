@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Star, Terminal, Brain, ChevronRight, Code, Cpu, Activity, Zap, Database, Loader2 } from "lucide-react"
+import { DateTime } from 'luxon';
+
 
 export default function MovieMind() {
   const [userName, setUserName] = useState("")
@@ -78,22 +80,25 @@ export default function MovieMind() {
     setRecommendation(null)
   }
 
+  const formatted = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss');
+
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen neural-grid scanlines">
         <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-6 sm:py-8">
           <div className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-6 sm:mb-8">
-              <Database className="w-12 h-12 text-primary terminal-glow" />
+              <Database className="w-12 h-12 text-primary terminal-glow-filter" />
               <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider">MovieMind</h1>
-              <Zap className="w-10 h-10 text-accent terminal-glow" />
+              <Zap className="w-10 h-10 text-primary terminal-glow-filter" />
             </div>
             <div className="space-y-3 max-w-3xl mx-auto">
               <p className="text-xl font-mono terminal-command">
-                $ ./neural_analysis.exe --status=COMPLETE --confidence=94.7% --runtime=0.847s
+                $ ./neural_analysis.exe --status=COMPLETE
               </p>
               <p className="text-base font-mono text-muted-foreground">
-                // Neural network analysis completed successfully
+                // A movie has been chosen based on another user's review
               </p>
               <div className="flex items-center justify-center gap-6 text-sm font-mono">
                 <span className="status-indicator status-active">
@@ -102,11 +107,11 @@ export default function MovieMind() {
                 </span>
                 <span className="status-indicator status-processing">
                   <Cpu className="w-3 h-3" />
-                  MEMORY: 1.2GB
+                  REVIEW: SELECTED
                 </span>
                 <span className="status-indicator">
                   <Terminal className="w-3 h-3" />
-                  PID: 2847
+                  CONFIDENCE: HIGH
                 </span>
               </div>
             </div>
@@ -119,62 +124,7 @@ export default function MovieMind() {
                 <div className="terminal-dot red"></div>
                 <div className="terminal-dot yellow"></div>
                 <div className="terminal-dot green"></div>
-                <span className="text-white font-mono text-sm ml-3">neural_match_result.json</span>
-                <div className="ml-auto flex items-center gap-3">
-                  <span className="status-indicator status-active">
-                    <Activity className="w-3 h-3" />
-                    MATCH FOUND
-                  </span>
-                </div>
-              </div>
-              <div className="p-8 space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="terminal-prompt font-mono text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-lg">cat neural_match_result.json | jq '.'</span>
-                </div>
-
-                <div className="space-y-6 ml-6 bg-black/40 p-6 rounded-lg border border-primary/30">
-                  <div className="font-mono text-sm terminal-output mb-4">
-                    {"{"}
-                    <br />
-                    &nbsp;&nbsp;"match_found": <span className="text-green-400">true</span>,<br />
-                    &nbsp;&nbsp;"confidence": <span className="text-cyan-400">0.947</span>,<br />
-                    &nbsp;&nbsp;"movie_title": <span className="text-yellow-400">"The Matrix"</span>,<br />
-                    &nbsp;&nbsp;"rating": <span className="text-cyan-400">5.0</span>,<br />
-                    &nbsp;&nbsp;"similarity_score": <span className="text-cyan-400">94.7</span>
-                    <br />
-                    {"}"}
-                  </div>
-
-                  <div className="border-t border-primary/20 pt-6">
-                    <h2 className="text-4xl font-bold terminal-output terminal-glow mb-4">
-                      {recommendation?.title || movie}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`w-7 h-7 ${star <= (recommendation?.stars || rating) ? "fill-primary text-primary terminal-glow" : "text-muted-foreground"}`}
-                        />
-                      ))}
-                      <span className="ml-4 text-xl font-mono terminal-output">
-                        [{recommendation?.stars || rating}.0/5.0]
-                      </span>
-                      <span className="ml-4 text-sm font-mono text-accent">
-                        {recommendation ? `${Math.round((recommendation.score || 0) * 100)}% MATCH` : 'ANALYSIS COMPLETE'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="terminal-window">
-              <div className="terminal-header">
-                <div className="terminal-dot red"></div>
-                <div className="terminal-dot yellow"></div>
-                <div className="terminal-dot green"></div>
-                <span className="text-white font-mono text-sm ml-3">user_review_data.txt</span>
+                <span className="text-white font-mono text-sm ml-3">recommender_review_data.txt</span>
                 <div className="ml-auto flex items-center gap-3">
                   <span className="status-indicator">
                     <Code className="w-3 h-3" />
@@ -185,23 +135,42 @@ export default function MovieMind() {
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="terminal-prompt font-mono text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-lg">cat user_review_data.txt</span>
+                  <span className="terminal-command font-mono text-lg">recommended_review_data.txt</span>
                 </div>
                 <div className="bg-black/50 p-6 rounded-lg border border-primary/30 ml-6">
-                  <div className="font-mono text-sm terminal-prompt mb-4">
-                    # USER REVIEW DATA - SENTIMENT ANALYSIS READY
+                  <h2 className="text-4xl font-bold terminal-output terminal-glow mb-4">
+                    {recommendation?.title || "No title found"}
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-7 h-7 ${star <= (recommendation?.stars || 5) ? "fill-primary text-primary terminal-glow" : "text-muted-foreground"}`}
+                      />
+                    ))}
+                    <span className="ml-4 text-xl font-mono terminal-output">
+                      [{recommendation?.stars || 5}.0/5.0]
+                    </span>
+                    <span className="ml-4 text-sm font-mono text-accent terminal-output">
+                      {recommendation ? `${Math.round((recommendation.score || 0) * 100)}% MATCH` : 'ANALYSIS COMPLETE'}
+                    </span>
                   </div>
-                  <blockquote className="text-foreground font-mono leading-relaxed text-base border-l-4 border-primary pl-4">
-                    "{review}"
-                  </blockquote>
-                  <div className="font-mono text-sm terminal-output mt-4 flex items-center gap-4">
-                    <span># ANALYSIS: 247 characters processed</span>
-                    <span># SENTIMENT: HIGHLY_POSITIVE</span>
-                    <span># KEYWORDS: 12 extracted</span>
+                  <div className="border-t  mt-6 border-primary/20 pt-6">
+                    <div className="font-mono text-sm terminal-prompt mb-4">
+                      # USER REVIEW DATA - SENTIMENT ANALYSIS READY
+                    </div>
+                    <blockquote className="text-foreground font-mono leading-relaxed text-base border-l-4 border-primary pl-4">
+                      "{recommendation?.review}"
+                    </blockquote>
+                    <div className="font-mono text-sm terminal-output mt-4 flex items-center gap-4">
+                      <span># ANALYSIS: {recommendation?.review.length} characters processed</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div style={{ height: '5x' }} /> {/* spacer with 5px height */}
+
 
             <div className="terminal-window">
               <div className="terminal-header">
@@ -219,25 +188,25 @@ export default function MovieMind() {
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="terminal-prompt font-mono text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-lg">tail -f neural_similarity_analysis.log</span>
+                  <span className="terminal-command font-mono text-lg">neural_similarity_analysis.log</span>
                 </div>
                 <div className="bg-black/50 p-6 rounded-lg border border-primary/30 ml-6 space-y-4">
                   <div className="space-y-2 text-sm font-mono">
                     <p>
-                      <span className="terminal-prompt">[2024-01-15 14:32:01]</span>{" "}
+                      <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-command">[INIT]</span> Loading neural network model v2.1.0...
                     </p>
                     <p>
-                      <span className="terminal-prompt">[2024-01-15 14:32:02]</span>{" "}
+                      <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-command">[PROC]</span> Analyzing sentiment patterns and thematic
                       elements...
                     </p>
                     <p>
-                      <span className="terminal-prompt">[2024-01-15 14:32:03]</span>{" "}
-                      <span className="terminal-output">[MATCH]</span> SIMILARITY_DETECTED: 94.7% confidence level
+                      <span className="terminal-prompt">[{formatted}]</span>{" "}
+                      <span className="terminal-output">[MATCH]</span> SIMILARITY_DETECTED: {Math.round((recommendation?.score || 0) * 100)}% confidence level
                     </p>
                     <p>
-                      <span className="terminal-prompt">[2024-01-15 14:32:04]</span>{" "}
+                      <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-output">[DONE]</span> Analysis complete. Generating explanation...
                     </p>
                   </div>
@@ -250,8 +219,7 @@ export default function MovieMind() {
                       </p>
                     </div>
                     <div className="font-mono text-sm terminal-output mt-4 flex items-center gap-6">
-                      <span># Correlation coefficient: 0.947</span>
-                      <span># Processing time: 847ms</span>
+                      <span># Correlation coefficient: {Math.round((recommendation?.score || 0) * 100)}</span>
                       <span># Confidence: HIGH</span>
                     </div>
                   </div>
@@ -261,9 +229,9 @@ export default function MovieMind() {
 
             <div className="text-center mt-12">
               <Button onClick={handleReset} className="terminal-button px-8 py-4">
-                <Terminal className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-center leading-tight">$ ./new_analysis.exe --reset</span>
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                <Terminal className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 text-accent" />
+                <span className="text-center leading-tight text-accent">$ ./new_analysis.exe</span>
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 text-accent" />
               </Button>
             </div>
           </div>
@@ -338,14 +306,14 @@ export default function MovieMind() {
                     </div>
                     <Input
                       type="text"
-                      placeholder="> Enter your name to personalize the experience..."
+                      placeholder="> Enter your name..."
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
-                      className="bg-input border-border font-mono  text-foreground terminal-input text-base sm:text-lg py-2 sm:py-3"
+                      className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 text-foreground terminal-input text-base sm:text-lg py-2 sm:py-3"
                     />
                     {userName && (
                       <div className="font-mono text-sm terminal-output mt-2">
-                        # Welcome, <span className="text-accent font-bold">{userName}</span>! Neural analysis ready.
+                        # Welcome, {userName}! Neural analysis ready.
                       </div>
                     )}
                   </div>
@@ -355,10 +323,10 @@ export default function MovieMind() {
                   </div>
                   <Input
                     type="text"
-                    placeholder="> Enter the movie title you want to analyze..."
+                    placeholder="> Enter the title of a movie you like..."
                     value={movie}
                     onChange={(e) => setMovie(e.target.value)}
-                    className="bg-input border-border font-mono text-foreground terminal-input text-base sm:text-lg py-2 sm:py-3"
+                    className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 terminal-input text-base sm:text-lg py-2 sm:py-3"
                     required
                   />
                 </div>
@@ -369,10 +337,10 @@ export default function MovieMind() {
                     <label className="font-mono text-accent text-sm sm:text-lg terminal-command"># user_review:</label>
                   </div>
                   <Textarea
-                    placeholder="> Share your detailed thoughts and feelings about this movie..."
+                    placeholder="> Write a detailed review of the movie. The more information you can provide about why specifically you like it, the better our recommendation will be..."
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
-                    className="bg-input border-border font-mono min-h-[120px] sm:min-h-[140px] text-foreground terminal-input text-sm sm:text-base leading-relaxed"
+                    className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 min-h-[120px] sm:min-h-[200px] terminal-input text-sm sm:text-base leading-relaxed"
                     required
                   />
                 </div>
@@ -422,21 +390,16 @@ export default function MovieMind() {
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 animate-spin" />
-                    ) : (
-                      <Brain className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
-                    )}
+                    ) : (null)}
                     <span className="text-center leading-tight text-accent">
                       {isLoading ? (
                         "$ ./neural_analysis.exe --processing..."
                       ) : (
                         <>
-                          $ ./execute_neural_analysis.exe
-                          <br className="sm:hidden" />
-                          <span className="hidden sm:inline"> </span>--process --generate-recommendation
+                          $ ./execute_neural_recommendation_engine.exe
                         </>
                       )}
                     </span>
-                    {!isLoading && <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 group-hover:translate-x-1 transition-transform" />}
                   </Button>
                 </div>
               </form>
@@ -448,15 +411,15 @@ export default function MovieMind() {
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm font-mono text-muted-foreground">
             <span className="flex items-center gap-2">
               <Activity className="w-3 h-3" />
-              neural_network_v2.1.0
+              Vector Embedding Powered by Google Gemini
             </span>
             <span className="flex items-center gap-2">
               <Cpu className="w-3 h-3" />
-              uptime: 99.7%
+              Generative AI Powered by Cerberas
             </span>
             <span className="flex items-center gap-2">
               <Database className="w-3 h-3" />
-              memory: 1.2GB/4GB
+              Database Powered by MongoDB
             </span>
           </div>
           <p className="text-xs font-mono terminal-output px-4 text-balance">
