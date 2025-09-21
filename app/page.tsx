@@ -93,7 +93,7 @@ export default function MovieMind() {
           <div className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-6 sm:mb-8">
               <Database className="w-12 h-12 text-primary terminal-glow-filter" />
-              <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider">MovieMind</h1>
+              <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading">MovieMind</h1>
               <Zap className="w-10 h-10 text-primary terminal-glow-filter" />
             </div>
             <div className="space-y-3 max-w-3xl mx-auto">
@@ -249,7 +249,7 @@ export default function MovieMind() {
         <div className="text-center mb-12 sm:mb-16">
           <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
             <Brain className="w-8 h-8 sm:w-12 sm:h-12 text-primary terminal-glow-filter" />
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-primary terminal-glow tracking-wider">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading">
               MovieMind
             </h1>
             <Cpu className="w-8 h-8 sm:w-12 sm:h-12 text-primary terminal-glow-filter " />

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -135,6 +136,13 @@
   filter:
     drop-shadow(0 0 10px var(--neural-glow)) drop-shadow(0 0 20px var(--neural-glow)) drop-shadow(0 0 30px var(--neural-glow));
   animation: pulse-glow 4s ease-in-out infinite alternate;
+}
+
+.manrope-heading {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
 
 

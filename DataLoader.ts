@@ -1,36 +1,36 @@
 import 'dotenv/config';
 import axios from 'axios';
-import { addReviewToDB, generateEmbedding, client, MovieReview } from './mindUtils';
+import { addReviewToDB, generateEmbedding, client, MovieReview } from './MindUtils';
 
-const API_KEY = process.env.TMDB_API_KEY; 
+const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 interface TMDBMovie {
-    id: number;
-    title: string;
+  id: number;
+  title: string;
 }
 
 interface TMDBReview {
-    author: string;
-    content: string;
-    author_details: {
-        rating: number | null;
-    };
+  author: string;
+  content: string;
+  author_details: {
+    rating: number | null;
+  };
 }
 
 interface TMDBReviewsResponse {
-    results: TMDBReview[];
+  results: TMDBReview[];
 }
 
 interface TMDBMoviesResponse {
-    results: TMDBMovie[];
-    total_pages: number;
+  results: TMDBMovie[];
+  total_pages: number;
 }
 
 interface ProcessedReview {
-    author: string;
-    stars: number;
-    review: string;
+  author: string;
+  stars: number;
+  review: string;
 }
 
 async function fetchTopMovies(limit: number = 400): Promise<TMDBMovie[]> {
@@ -62,7 +62,7 @@ async function fetchReviews(movieId: number): Promise<ProcessedReview[]> {
     .slice(0, 4)
     .map(r => ({
       author: r.author,
-      stars: (r.author_details.rating || 0) / 2, 
+      stars: (r.author_details.rating || 0) / 2,
       review: r.content
     }));
 }
@@ -90,7 +90,7 @@ async function run(): Promise<void> {
       }
     }
   } finally {
-    await client.close(); 
+    await client.close();
   }
 }
 

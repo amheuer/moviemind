@@ -4,8 +4,8 @@ import { client, addReviewToDB, generateEmbedding, compareReviews, queryDB, Movi
 export async function main(): Promise<void> {
     await client.connect();
     try {
-        const text = 'By and large, it’s at least a solid movie, but it’s hard to not feel immensely disappointed. It moves insanely fast, sacrificing any ounce of storytelling in favor of Easter eggs, gags, and nostalgia.It’s kind of shocking how little time the movie spends trying to make us care about these worlds or characters and it doesn’t help that beside Jack Black(the easy MVP), everyone else seems to phone it in.  But even if it flounders at the basic foundation, it’s still fun ? Looks good, some of the jokes hit well, and I enjoyed a lot of the action sequences.There’s a particular nihilistic side character that had me in stitches. Am I blinded by own adoration for the Mario Brothers franchise ? Likely.But presumably that’s going to be the case for 90 % of the people who will see it this';
-        const title = 'The Super Mario Bros. Movie'
+        const text = 'Masterfully constructed and thoroughly compelling genre piece (effortlessly transitioning between familial drama, heist movie, satirical farce, subterranean horror) about the perverse and mutating symbiotic relationship of increasingly unequal, transactional class relationships, and who can and can\'t afford to be oblivious about the severe, violent material/psychic toll of capitalist accumulation. ("They say a ghost in the house brings wealth.") I think I ultimately admired this more than I felt it, it\'s clever and manufactured in a way that feels shiny and surface-level more than personal but I think it works in a movie in part about how those shiny surfaces distract us from the horrifying conditions that exist in order to sustain them. The seams of this system are ripping and it feels like Bong has channeled those economic precarities, indignities and anxieties into his own Rube Goldberg microcosm that asks how anyone could be surprised by a violent destination.';
+        const title = 'Parasite'
         const author = 'user'
         const stars = 5
         const embed = await generateEmbedding(text);
