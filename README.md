@@ -15,7 +15,21 @@ The recommendation engine powered by actual intelligence. Movie suggestions base
 - GEMINI_API_KEY
 - CEREBRAS_API_KEY
 
-## Run It
+## Run a development server
 ```bash
 npm run dev
 ```
+## Make a build
+```bash
+npm run build
+```
+## Run the linter
+```bash
+npm run lint
+```
+## Launch for production
+```bash
+npm run start
+```
+  
+ 
