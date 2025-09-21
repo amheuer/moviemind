@@ -11,7 +11,9 @@ The recommendation engine powered by actual intelligence. Movie suggestions base
 
 ## Environment Variables:
 - TMDB_API_KEY
-- MONGO_URI
+- MONGO_USERNAME
+- MONGO_PASSWORD
+- GOOGLE_PROJ_ID
 - GEMINI_API_KEY
 - CEREBRAS_API_KEY
 
@@ -30,6 +32,10 @@ npm run lint
 ## Launch for production
 ```bash
 npm run start
+```
+## Run individual typescript files
+```bash
+tsx filename.ts
 ```
   
  
