@@ -19,7 +19,8 @@ export default function MovieMind() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const MIN_REVIEW_LENGTH = 150;
-  const lengthValid = review.length >= MIN_REVIEW_LENGTH;
+  const MAX_REVIEW_LENGTH = 500;
+  const lengthValid = review.length >= MIN_REVIEW_LENGTH && review.length <= MAX_REVIEW_LENGTH;
   const charactersTyped = review.length;
   const [recommendation, setRecommendation] = useState<{
     title: string
@@ -93,7 +94,7 @@ export default function MovieMind() {
           <div className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-6 sm:mb-8">
               <Database className="w-12 h-12 text-primary terminal-glow-filter" />
-              <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider">MovieMind</h1>
+              <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading">MovieMind</h1>
               <Zap className="w-10 h-10 text-primary terminal-glow-filter" />
             </div>
             <div className="space-y-3 max-w-3xl mx-auto">
@@ -160,7 +161,7 @@ export default function MovieMind() {
                   </div>
                   <div className="border-t  mt-6 border-primary/20 pt-6">
                     <div className="font-mono text-sm terminal-prompt mb-4">
-                      # USER REVIEW DATA - SENTIMENT ANALYSIS READY
+                      # USER REVIEW DATA - SIMILARITY ANALYSIS READY
                     </div>
                     <blockquote className="text-foreground font-mono leading-relaxed text-base border-l-4 border-primary pl-4">
                       "{recommendation?.review}"
@@ -249,7 +250,7 @@ export default function MovieMind() {
         <div className="text-center mb-12 sm:mb-16">
           <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
             <Brain className="w-8 h-8 sm:w-12 sm:h-12 text-primary terminal-glow-filter" />
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-primary terminal-glow tracking-wider">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading">
               MovieMind
             </h1>
             <Cpu className="w-8 h-8 sm:w-12 sm:h-12 text-primary terminal-glow-filter " />
@@ -348,9 +349,14 @@ export default function MovieMind() {
                     required
                     minLength={MIN_REVIEW_LENGTH}
                   />
-                  {!lengthValid && (
+                  {!lengthValid && review.length < MIN_REVIEW_LENGTH && (
                     <p className="text-red-500 text-sm mt-1">
                       Review must be at least {MIN_REVIEW_LENGTH} characters. [{charactersTyped}/{MIN_REVIEW_LENGTH}]
+                    </p>
+                  )}
+                  {!lengthValid && review.length > MAX_REVIEW_LENGTH && (
+                    <p className="text-red-500 text-sm mt-1">
+                      Review must be less than {MAX_REVIEW_LENGTH} characters. [{charactersTyped}/{MAX_REVIEW_LENGTH}]
                     </p>
                   )}
                 </div>

@@ -2,35 +2,35 @@ import 'dotenv/config';
 import axios from 'axios';
 import { addReviewToDB, generateEmbeddingBatch, client, MovieReview } from './MindUtils';
 
-const API_KEY = process.env.TMDB_API_KEY; 
+const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 interface TMDBMovie {
-    id: number;
-    title: string;
+  id: number;
+  title: string;
 }
 
 interface TMDBReview {
-    author: string;
-    content: string;
-    author_details: {
-        rating: number | null;
-    };
+  author: string;
+  content: string;
+  author_details: {
+    rating: number | null;
+  };
 }
 
 interface TMDBReviewsResponse {
-    results: TMDBReview[];
+  results: TMDBReview[];
 }
 
 interface TMDBMoviesResponse {
-    results: TMDBMovie[];
-    total_pages: number;
+  results: TMDBMovie[];
+  total_pages: number;
 }
 
 interface ProcessedReview {
-    author: string;
-    stars: number;
-    review: string;
+  author: string;
+  stars: number;
+  review: string;
 }
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -158,6 +158,7 @@ async function run(): Promise<void> {
       await processBatch(buffer);
     }
   } finally {
+    await client.close();
     await client.close();
   }
 }

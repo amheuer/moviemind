@@ -82,10 +82,33 @@ export async function queryDB(embedding: number[], title: string, author: string
                 limit: 20
             }
         },
+        // Normalize title and author from the DB
+        {
+            $addFields: {
+                normalizedDbTitle: {
+                    $toLower: {
+                        $replaceAll: {
+                            input: "$title",
+                            find: " ",
+                            replacement: ""
+                        }
+                    }
+                },
+                normalizedDbAuthor: {
+                    $toLower: {
+                        $replaceAll: {
+                            input: "$author",
+                            find: " ",
+                            replacement: ""
+                        }
+                    }
+                }
+            }
+        },
         {
             $match: {
-                title: { $not: new RegExp(`^${title}$`, 'i') },
-                author: { $not: new RegExp(`^${author}$`, 'i') }
+                normalizedDbTitle: { $ne: normalizedTitle },
+                normalizedDbAuthor: { $ne: normalizedAuthor }
             }
         },
         {
@@ -110,6 +133,7 @@ export async function queryDB(embedding: number[], title: string, author: string
             }
         }
     ];
+
     const docs = await coll.aggregate(agg).toArray();
     docs.forEach((doc) => console.dir(JSON.stringify(doc)));
     return docs as ReviewWithScore[];
