@@ -19,7 +19,8 @@ export default function MovieMind() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const MIN_REVIEW_LENGTH = 150;
-  const lengthValid = review.length >= MIN_REVIEW_LENGTH;
+  const MAX_REVIEW_LENGTH = 500;
+  const lengthValid = review.length >= MIN_REVIEW_LENGTH && review.length <= MAX_REVIEW_LENGTH;
   const charactersTyped = review.length;
   const [recommendation, setRecommendation] = useState<{
     title: string
@@ -348,9 +349,14 @@ export default function MovieMind() {
                     required
                     minLength={MIN_REVIEW_LENGTH}
                   />
-                  {!lengthValid && (
+                  {!lengthValid && review.length < MIN_REVIEW_LENGTH && (
                     <p className="text-red-500 text-sm mt-1">
                       Review must be at least {MIN_REVIEW_LENGTH} characters. [{charactersTyped}/{MIN_REVIEW_LENGTH}]
+                    </p>
+                  )}
+                  {!lengthValid && review.length > MAX_REVIEW_LENGTH && (
+                    <p className="text-red-500 text-sm mt-1">
+                      Review must be less than {MAX_REVIEW_LENGTH} characters. [{charactersTyped}/{MAX_REVIEW_LENGTH}]
                     </p>
                   )}
                 </div>
