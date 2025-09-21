@@ -18,6 +18,9 @@ export default function MovieMind() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const MIN_REVIEW_LENGTH = 150;
+  const lengthValid = review.length >= MIN_REVIEW_LENGTH;
+  const charactersTyped = review.length;
   const [recommendation, setRecommendation] = useState<{
     title: string
     author: string
@@ -307,6 +310,7 @@ export default function MovieMind() {
                     <Input
                       type="text"
                       placeholder="> Enter your name..."
+                      required
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 text-foreground terminal-input text-base sm:text-lg py-2 sm:py-3"
@@ -342,7 +346,13 @@ export default function MovieMind() {
                     onChange={(e) => setReview(e.target.value)}
                     className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 min-h-[120px] sm:min-h-[200px] terminal-input text-sm sm:text-base leading-relaxed"
                     required
+                    minLength={MIN_REVIEW_LENGTH}
                   />
+                  {!lengthValid && (
+                    <p className="text-red-500 text-sm mt-1">
+                      Review must be at least {MIN_REVIEW_LENGTH} characters. [{charactersTyped}/{MIN_REVIEW_LENGTH}]
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3 sm:space-y-4 ml-4 sm:ml-8">
@@ -386,7 +396,7 @@ export default function MovieMind() {
                   <Button
                     type="submit"
                     className="w-full terminal-button"
-                    disabled={!movie || !review || rating === 0 || isLoading}
+                    disabled={!movie || !review || rating === 0 || !userName || !lengthValid || isLoading}
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 animate-spin" />
