@@ -10,10 +10,10 @@ The recommendation engine powered by actual intelligence. Movie suggestions base
 - DataLoader with ability to parse through TMDB API and batch export
 
 ## Environment Variables:
-TMDB_API_KEY
-MONGO_URI
-GEMINI_API_KEY
-CEREBRAS_API_KEY
+- TMDB_API_KEY
+- MONGO_URI
+- GEMINI_API_KEY
+- CEREBRAS_API_KEY
 
 ## Run It
 ```bash
