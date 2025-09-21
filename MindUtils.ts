@@ -33,7 +33,7 @@ export interface ReviewWithScore extends MovieReview {
 
 export async function addReviewToDB(item: MovieReview): Promise<ObjectId> {
     const db = client.db('mindmap');
-    const collection = db.collection('movie_reviews');
+    const collection = db.collection('batch_reviews');
     const result = await collection.insertOne(item);
     return result.insertedId;
 }
@@ -54,10 +54,24 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     if (!embDoc || !embDoc.values) throw new Error('No embedding returned from model');
     return Array.isArray(embDoc.values) ? embDoc.values : Array.from(embDoc.values);
 }
+export async function generateEmbeddingBatch(texts: string[]): Promise<number[][]> {
+  const ai = new GoogleGenerativeAI(process.env.GEMMA_API_KEY!);
+  const model = ai.getGenerativeModel({ model: "gemini-embedding-001" });
+
+  // Gemini supports batching if you send multiple "content" items
+  const requests = texts.map(text => ({
+    content: { parts: [{ text }], role: "user" },
+    taskType: TaskType.SEMANTIC_SIMILARITY
+  }));
+
+  const responses = await Promise.all(requests.map(r => model.embedContent(r)));
+  return responses.map(r => r.embedding!.values as number[]);
+}
+
 
 export async function queryDB(embedding: number[], title: string, author: string): Promise<ReviewWithScore[]> {
     const database = client.db("mindmap");
-    const coll = database.collection("movie_reviews");
+    const coll = database.collection("batch_reviews");
     const agg = [
         {
             $vectorSearch: {
