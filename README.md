@@ -2,6 +2,8 @@
 
 The recommendation engine powered by actual intelligence. Movie suggestions based on people liking movies for the same reasons you do. Driven by a vector database of reviews and semantic similarity.
 
+Try it @ <https://moviemind-alpha.vercel.app/>
+
 ## Features:
 - Vector embeddings with Google Gemini
 - Vector Database with MongoDB
