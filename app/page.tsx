@@ -94,17 +94,19 @@ export default function MovieMind() {
           <div className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-6 sm:mb-8">
               <Database className="w-12 h-12 text-primary terminal-glow-filter" />
-              <h1 className="text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading">MovieMind</h1>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-primary terminal-glow tracking-wider manrope-heading text-balance">
+                MovieMind
+              </h1>
               <Zap className="w-10 h-10 text-primary terminal-glow-filter" />
             </div>
-            <div className="space-y-3 max-w-3xl mx-auto">
-              <p className="text-xl font-mono terminal-command">
+            <div className="space-y-3 max-w-3xl mx-auto px-3">
+              <p className="text-base sm:text-xl font-mono terminal-command text-balance break-words hyphens-auto">
                 $ ./neural_analysis.exe --status=COMPLETE
               </p>
-              <p className="text-base font-mono text-muted-foreground">
+              <p className="text-sm sm:text-base font-mono text-muted-foreground text-pretty">
                 // A movie has been chosen based on another user's review
               </p>
-              <div className="flex items-center justify-center gap-6 text-sm font-mono">
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-mono">
                 <span className="status-indicator status-active">
                   <Activity className="w-3 h-3" />
                   ANALYSIS: COMPLETE
@@ -128,8 +130,8 @@ export default function MovieMind() {
                 <div className="terminal-dot red"></div>
                 <div className="terminal-dot yellow"></div>
                 <div className="terminal-dot green"></div>
-                <span className="text-white font-mono text-sm ml-3">recommender_review_data.txt</span>
-                <div className="ml-auto flex items-center gap-3">
+                <span className="text-white font-mono text-sm ml-3 truncate max-w-[50%] no-min-w">recommender_review_data.txt</span>
+                <div className="ml-auto flex items-center gap-3 shrink-0">
                   <span className="status-indicator">
                     <Code className="w-3 h-3" />
                     READ-ONLY
@@ -137,25 +139,25 @@ export default function MovieMind() {
                 </div>
               </div>
               <div className="p-8">
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 min-w-0">
                   <span className="terminal-prompt font-mono text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-lg">recommended_review_data.txt</span>
+                  <span className="terminal-command font-mono text-base sm:text-lg break-words hyphens-auto text-balance no-min-w max-w-full">recommended_review_data.txt</span>
                 </div>
                 <div className="bg-black/50 p-6 rounded-lg border border-primary/30 ml-6">
-                  <h2 className="text-4xl font-bold terminal-output terminal-glow mb-4">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold terminal-output terminal-glow mb-4 text-balance break-words hyphens-auto max-w-full">
                     {recommendation?.title || "No title found"}
                   </h2>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
                         className={`w-7 h-7 ${star <= (recommendation?.stars || 5) ? "fill-primary text-primary terminal-glow" : "text-muted-foreground"}`}
                       />
                     ))}
-                    <span className="ml-4 text-xl font-mono terminal-output">
+                    <span className="sm:ml-4 ml-2 text-lg sm:text-xl font-mono terminal-output">
                       [{recommendation?.stars || 5}.0/5.0]
                     </span>
-                    <span className="ml-4 text-sm font-mono text-accent terminal-output">
+                    <span className="sm:ml-4 ml-2 text-xs sm:text-sm font-mono text-accent terminal-output inline-flex items-center leading-none tracking-normal">
                       {recommendation ? `${Math.round((recommendation.score || 0) * 100)}% MATCH` : 'ANALYSIS COMPLETE'}
                     </span>
                   </div>
@@ -163,11 +165,11 @@ export default function MovieMind() {
                     <div className="font-mono text-sm terminal-prompt mb-4">
                       # USER REVIEW DATA - SIMILARITY ANALYSIS READY
                     </div>
-                    <blockquote className="text-foreground font-mono leading-relaxed text-base border-l-4 border-primary pl-4">
+                    <blockquote className="text-foreground font-mono leading-relaxed text-sm sm:text-base border-l-4 border-primary pl-4 break-words hyphens-auto text-pretty">
                       "{recommendation?.review}"
                     </blockquote>
-                    <div className="font-mono text-sm terminal-output mt-4 flex items-center gap-4">
-                      <span># ANALYSIS: {recommendation?.review.length} characters processed</span>
+                    <div className="font-mono text-xs sm:text-sm terminal-output mt-4 flex flex-wrap items-center gap-2 sm:gap-4">
+                      <span className="break-words hyphens-auto"># ANALYSIS: {recommendation?.review.length} characters processed</span>
                     </div>
                   </div>
                 </div>
@@ -181,8 +183,8 @@ export default function MovieMind() {
                 <div className="terminal-dot red"></div>
                 <div className="terminal-dot yellow"></div>
                 <div className="terminal-dot green"></div>
-                <span className="text-white font-mono text-sm ml-3">neural_similarity_analysis.log</span>
-                <div className="ml-auto flex items-center gap-3">
+                <span className="text-white font-mono text-sm ml-3 truncate max-w-[50%] no-min-w">neural_similarity_analysis.log</span>
+                <div className="ml-auto flex items-center gap-3 shrink-0">
                   <span className="status-indicator status-processing">
                     <Brain className="w-3 h-3 animate-pulse" />
                     AI ANALYSIS
@@ -190,26 +192,26 @@ export default function MovieMind() {
                 </div>
               </div>
               <div className="p-8">
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 min-w-0">
                   <span className="terminal-prompt font-mono text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-lg">neural_similarity_analysis.log</span>
+                  <span className="terminal-command font-mono text-base sm:text-lg break-words hyphens-auto text-balance no-min-w max-w-full">neural_similarity_analysis.log</span>
                 </div>
                 <div className="bg-black/50 p-6 rounded-lg border border-primary/30 ml-6 space-y-4">
-                  <div className="space-y-2 text-sm font-mono">
-                    <p>
+                  <div className="space-y-2 text-xs sm:text-sm font-mono">
+                    <p className="break-words hyphens-auto text-pretty">
                       <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-command">[INIT]</span> Loading neural network model v2.1.0...
                     </p>
-                    <p>
+                    <p className="break-words hyphens-auto text-pretty">
                       <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-command">[PROC]</span> Analyzing sentiment patterns and thematic
                       elements...
                     </p>
-                    <p>
+                    <p className="break-words hyphens-auto text-pretty">
                       <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-output">[MATCH]</span> SIMILARITY_DETECTED: {Math.round((recommendation?.score || 0) * 100)}% confidence level
                     </p>
-                    <p>
+                    <p className="break-words hyphens-auto text-pretty">
                       <span className="terminal-prompt">[{formatted}]</span>{" "}
                       <span className="terminal-output">[DONE]</span> Analysis complete. Generating explanation...
                     </p>
@@ -218,13 +220,13 @@ export default function MovieMind() {
                   <div className="mt-6 pt-6 border-t border-primary/20">
                     <div className="font-mono text-sm terminal-command mb-4"># NEURAL SIMILARITY ANALYSIS REPORT</div>
                     <div className="bg-black/30 p-4 rounded border border-accent/20">
-                      <p className="text-foreground font-mono leading-relaxed">
+                      <p className="text-foreground font-mono leading-relaxed text-sm sm:text-base break-words hyphens-auto text-pretty">
                         {recommendation?.explanation || `Your review of ${movie} has been analyzed by our neural network. The system has identified patterns in your preferences and generated a personalized recommendation based on similar user experiences and sentiment analysis.`}
                       </p>
                     </div>
-                    <div className="font-mono text-sm terminal-output mt-4 flex items-center gap-6">
-                      <span># Correlation coefficient: {Math.round((recommendation?.score || 0) * 100)}</span>
-                      <span># Confidence: HIGH</span>
+                    <div className="font-mono text-xs sm:text-sm terminal-output mt-4 flex flex-wrap items-center gap-3 sm:gap-6">
+                      <span className="break-words hyphens-auto"># Correlation coefficient: {Math.round((recommendation?.score || 0) * 100)}</span>
+                      <span className="break-words hyphens-auto"># Confidence: HIGH</span>
                     </div>
                   </div>
                 </div>
@@ -256,7 +258,7 @@ export default function MovieMind() {
             <Cpu className="w-8 h-8 sm:w-12 sm:h-12 text-primary terminal-glow-filter " />
           </div>
           <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto px-2">
-            <p className="text-base sm:text-xl font-mono terminal-command text-balance">
+            <p className="text-base sm:text-xl font-mono terminal-command text-balance break-words hyphens-auto no-min-w max-w-full text-center">
               $ ./neural_recommendation_engine.exe
             </p>
             <p className="text-sm sm:text-base font-mono text-muted-foreground text-pretty">
@@ -297,7 +299,7 @@ export default function MovieMind() {
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
                   <span className="terminal-prompt font-mono text-base sm:text-lg">{userName || 'user'}@moviemind:~$</span>
-                  <span className="terminal-command font-mono text-sm sm:text-lg text-balance">
+                  <span className="terminal-command font-mono text-sm sm:text-lg text-balance break-words hyphens-auto no-min-w max-w-full">
                     ./input_review_data
                   </span>
                 </div>
@@ -349,6 +351,10 @@ export default function MovieMind() {
                     required
                     minLength={MIN_REVIEW_LENGTH}
                   />
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
+                    <span className="sr-only">Character count</span>
+                    <span aria-live="polite" className="ml-auto">{charactersTyped}/{MAX_REVIEW_LENGTH}</span>
+                  </div>
                   {!lengthValid && review.length < MIN_REVIEW_LENGTH && (
                     <p className="text-red-500 text-sm mt-1">
                       Review must be at least {MIN_REVIEW_LENGTH} characters. [{charactersTyped}/{MIN_REVIEW_LENGTH}]
@@ -366,13 +372,14 @@ export default function MovieMind() {
                     <Code className="w-4 h-4 sm:w-5 sm:h-5 text-accent flex-shrink-0 terminal-command" />
                     <label className="font-mono text-accent text-sm sm:text-lg terminal-command"># rating_score:</label>
                   </div>
-                  <div className="flex items-center justify-start gap-3 sm:gap-4 flex-wrap">
+                  <div className="flex items-center justify-start gap-3 sm:gap-4 flex-wrap relative z-10">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
                         type="button"
                         onClick={() => handleStarClick(star)}
-                        className="transition-all hover:scale-110 focus:scale-110 touch-manipulation p-1"
+                        aria-pressed={rating >= star}
+                        className="transition-all hover:scale-110 focus:scale-110 touch-manipulation p-1 cursor-pointer"
                       >
                         <Star
                           className={`w-8 h-8 sm:w-10 sm:h-10 ${star <= rating
@@ -407,7 +414,7 @@ export default function MovieMind() {
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 animate-spin" />
                     ) : (null)}
-                    <span className="text-center leading-tight text-accent">
+                    <span className="text-center leading-tight text-accent break-words hyphens-auto no-min-w max-w-full">
                       {isLoading ? (
                         "$ ./neural_analysis.exe --processing..."
                       ) : (

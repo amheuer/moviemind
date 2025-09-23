@@ -58,7 +58,6 @@ export async function generateEmbeddingBatch(texts: string[]): Promise<number[][
     const ai = new GoogleGenerativeAI(process.env.GEMMA_API_KEY!);
     const model = ai.getGenerativeModel({ model: "gemini-embedding-001" });
 
-    // Gemini supports batching if you send multiple "content" items
     const requests = texts.map(text => ({
         content: { parts: [{ text }], role: "user" },
         taskType: TaskType.SEMANTIC_SIMILARITY
