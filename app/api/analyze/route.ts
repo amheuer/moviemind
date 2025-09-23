@@ -12,15 +12,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Connect to database
     await client.connect()
 
     try {
-      // Generate embedding for the review
       const embedding = await generateEmbedding(review)
 
-      // Create the movie review object
-      const movieReview: MovieReview = {
+      const userInput: MovieReview = {
         title: movie,
         author: userName,
         stars: rating,
@@ -29,14 +26,14 @@ export async function POST(request: NextRequest) {
       }
 
       // Add review to database
-      await addReviewToDB(movieReview)
+      await addReviewToDB(userInput)
 
       // Query for similar reviews
-      const results = await queryDB(embedding, movie, userName)
+      const results = await queryDB(userInput)
 
       if (results && results.length > 0) {
         // Get explanation for the recommendation
-        const explanation = await compareReviews(movieReview, results[0])
+        const explanation = await compareReviews(userInput, results[0])
 
         return NextResponse.json({
           recommendation: {

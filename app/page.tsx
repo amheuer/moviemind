@@ -330,7 +330,7 @@ export default function MovieMind() {
                   </div>
                   <Input
                     type="text"
-                    placeholder="> Enter the title of a movie you like..."
+                    placeholder="> Enter the title of a movie you want a recommendation based on..."
                     value={movie}
                     onChange={(e) => setMovie(e.target.value)}
                     className="bg-input border-border font-mono placeholder:text-muted-foreground placeholder:opacity-50 terminal-input text-base sm:text-lg py-2 sm:py-3"

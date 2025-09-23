@@ -31,10 +31,12 @@ export interface ReviewWithScore extends MovieReview {
     score: number;
 }
 
-export async function addReviewToDB(item: MovieReview): Promise<ObjectId> {
+export async function addReviewToDB(userInput: MovieReview): Promise<ObjectId | null> {
+    if (userInput.stars < 3)
+        return null;
     const db = client.db('mindmap');
     const collection = db.collection('batch_reviews');
-    const result = await collection.insertOne(item);
+    const result = await collection.insertOne(userInput);
     return result.insertedId;
 }
 
@@ -67,17 +69,19 @@ export async function generateEmbeddingBatch(texts: string[]): Promise<number[][
     return responses.map(r => r.embedding!.values as number[]);
 }
 
-export async function queryDB(embedding: number[], title: string, author: string): Promise<ReviewWithScore[]> {
+export async function queryDB(userInput: MovieReview): Promise<ReviewWithScore[]> {
+    if (userInput.stars < 3)
+        userInput.embedding = userInput.embedding.map(num => num * -1);
     const database = client.db("mindmap");
     const coll = database.collection("batch_reviews");
-    const normalizedTitle = title.replace(/\s+/g, '').toLowerCase();
-    const normalizedAuthor = author.replace(/\s+/g, '').toLowerCase();
+    const normalizedTitle = userInput.title.replace(/\s+/g, '').toLowerCase();
+    const normalizedAuthor = userInput.author.replace(/\s+/g, '').toLowerCase();
     const agg = [
         {
             $vectorSearch: {
                 index: 'vector_index',
                 path: 'embedding',
-                queryVector: embedding,
+                queryVector: userInput.embedding,
                 numCandidates: 20,
                 limit: 20
             }
@@ -140,8 +144,10 @@ export async function queryDB(embedding: number[], title: string, author: string
 }
 
 export async function compareReviews(userInput: MovieReview, similarReview: ReviewWithScore): Promise<string | undefined> {
+    const positivePrompt = `You are the charming and helpful chatbot that runs the website MovieMind. Your job is to look at a user's review of a movie and a recommendation for another movie based on a similar user review and explain to the user why the recommendation was made. You must use 60 words or less and should always support the suggestion that was made and never provide alternative suggestions. Use the term "we" and take responsibility for the website's suggestions. The user\'s review for the movie ${userInput.title} was ${userInput.review} and they gave it ${userInput.stars} stars. The recommended movie was ${similarReview.title}, the review for it was ${similarReview.review} and it was reviewed as ${similarReview.stars} stars.` 
+    const negativePrompt = `You are the charming and helpful chatbot that runs the website MovieMind. Your job is to look at a user's review of a movie they did not like and a recommendation for another movie based on an opposing user review and explain to the user why the recommendation was made. You must use 60 words or less and should always support the suggestion that was made and never provide alternative suggestions. Use the term "we" and take responsibility for the website's suggestions. The user\'s review for the movie ${userInput.title} was ${userInput.review} and they gave it ${userInput.stars} stars. The recommended movie was ${similarReview.title}, the review for it was ${similarReview.review} and it was reviewed as ${similarReview.stars} stars.` 
     const completionCreateResponse = await cerebrasClient.chat.completions.create({
-        messages: [{ role: 'user', content: `You are the charming and helpful chatbot that runs the website MovieMind. Your job is to look at a user's review of a movie and a recommendation for another movie based on a similar user review and explain to the user why the recommendation was made. You must use 60 words or less and should always support the suggestion that was made and never provide alternative suggestions. Use the term "we" and take responsibility for the website's suggestions. The user\'s review for the movie ${userInput.title} was ${userInput.review} and they gave it ${userInput.stars} stars. The recommended movie was ${similarReview.title}, the review for it was ${similarReview.review} and it was reviewed as ${similarReview.stars} stars.` }],
+        messages: [{ role: 'user', content: userInput.stars > 3 ? positivePrompt : negativePrompt}],
         model: 'llama-4-scout-17b-16e-instruct',
         max_tokens: 200
     });
