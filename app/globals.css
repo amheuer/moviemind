@@ -117,13 +117,42 @@
   }
 
   body {
-    background: var(--background);
+    background: transparent;
     @apply text-foreground font-mono;
     min-height: 100vh;
+  }
+
+  /* Fixed parallax background gradient layer */
+  .site-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
     background: linear-gradient(135deg, #0a0a0f 0%, #240046 25%, #3c096c 50%, #16213e 75%, #0a0a0f 100%);
-    background-attachment: fixed;
     background-size: 400% 400%;
     animation: gradient-shift 20s ease infinite;
+    background-position: 0 calc(var(--parallax-y, 0px) * 0.3);
+    will-change: background-position;
+  }
+
+  /* Fixed neural grid overlay (non-scrolling) */
+  .site-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(157, 78, 221, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(157, 78, 221, 0.1) 1px, transparent 1px),
+      radial-gradient(circle at 20% 20%, rgba(157, 78, 221, 0.05) 0%, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(199, 125, 255, 0.05) 0%, transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.03) 0%, transparent 70%);
+    background-size: 50px 50px, 50px 50px, 400px 400px, 400px 400px, 600px 600px;
+    animation: neural-pulse 8s ease-in-out infinite;
+  }
+
+  /* Neutralize in-content neural-grid so it doesn't scroll */
+  .neural-grid {
+    background: none !important;
   }
 
   /* Hide the visual scrollbar but keep scrolling enabled */
