@@ -1,5 +1,7 @@
 # MovieMind
 
+> This project was built in **48 hours** for the [PennApps XXVI](https://pennapps.com/) hackathon at the **University of Pennsylvania**. At the hackathon it won the **Best use of MongoDB Atlas** award
+
 The recommendation engine powered by actual intelligence. Movie suggestions based on people liking movies for the same reasons you do. Driven by a vector database of reviews and semantic similarity.
 
 Try it @ <https://moviemind-alpha.vercel.app/>
